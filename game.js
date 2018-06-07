@@ -32,14 +32,21 @@ const ball = {
     this.y += this.speedY
   },
   rebound() {
-    if(this.x > canvas.width - this.radius) {
-      this.speedX = -this.speedX
+    // Bounce ball on top and bottom of canvas
+    if(this.y > canvas.height - this.radius || this.y < 0) {
+      this.speedY = -this.speedY
     }
+
+    // Bounce ball on player paddle
     if(this.x < PADDLE_WIDTH + PADDLE_DISTANCE && this.y > playerPaddle.y && this.y < playerPaddle.y + PADDLE_HEIGHT ) {
       this.speedX = -this.speedX
     }
-    if(this.y > canvas.height - this.radius || this.y < 0) {
-      this.speedY = -this.speedY
+
+    // Bounce ball on computer paddle
+    if(this.x > canvas.width - (PADDLE_WIDTH + PADDLE_DISTANCE) &&
+    this.y > computerPaddle.y &&
+    this.y < computerPaddle.y + PADDLE_HEIGHT ) {
+      this.speedX = -this.speedX
     }
   }
 }
@@ -55,7 +62,26 @@ const playerPaddle = {
     drawRect(this.x, this.y, this.width, this.height, this.color)
   },
   move(y) {
-    this.y = y - 50
+    this.y = y - PADDLE_HEIGHT / 2
+    if (this.y < 0) this.y = 0
+    if (this.y > canvas.height - PADDLE_HEIGHT) this.y = canvas.height - PADDLE_HEIGHT
+  }
+}
+
+const computerPaddle = {
+  x: canvas.width - (PADDLE_WIDTH + PADDLE_DISTANCE),
+  y: canvas.height / 2 - PADDLE_HEIGHT / 2,
+  speed: 6,
+  width: PADDLE_WIDTH,
+  height: PADDLE_HEIGHT,
+  color: 'white',
+  draw() {
+    drawRect(this.x, this.y, this.width, this.height, this.color)
+  },
+  move() {
+    if (ball.y > this.y + PADDLE_HEIGHT) { this.y += this.speed }
+    if (ball.y < this.y) { this.y -= this.speed }
+
     if (this.y < 0) this.y = 0
     if (this.y > canvas.height - PADDLE_HEIGHT) this.y = canvas.height - PADDLE_HEIGHT
   }
@@ -70,5 +96,7 @@ window.onload = () => {
     ball.move()
     ball.rebound()
     playerPaddle.draw()
+    computerPaddle.draw()
+    computerPaddle.move()
   })
 }

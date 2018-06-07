@@ -46,12 +46,17 @@ const paddlePlayer = {
   width: 10,
   height: PADDLE_HEIGHT,
   color: 'white',
-  draw(y) {
+  draw() {
     drawRect(this.x, this.y, this.width, this.height, this.color)
+  },
+  move(y) {
+    paddlePlayer.y = y - 50
+    if (paddlePlayer.y < 0) paddlePlayer.y = 0
+    if (paddlePlayer.y > canvas.height - PADDLE_HEIGHT) paddlePlayer.y = canvas.height - PADDLE_HEIGHT
   }
 }
 
-window.addEventListener("mousemove", evt => paddlePlayer.y = evt.clientY - 50)
+window.addEventListener("mousemove", evt => paddlePlayer.move(evt.clientY))
 
 window.onload = () => {
   setInterval(() => {

@@ -35,7 +35,7 @@ const ball = {
     if(this.x > canvas.width - this.radius) {
       this.speedX = -this.speedX
     }
-    if(this.x < PADDLE_WIDTH + PADDLE_DISTANCE && this.y > paddlePlayer.y && this.y < paddlePlayer.y + PADDLE_HEIGHT ) {
+    if(this.x < PADDLE_WIDTH + PADDLE_DISTANCE && this.y > playerPaddle.y && this.y < playerPaddle.y + PADDLE_HEIGHT ) {
       this.speedX = -this.speedX
     }
     if(this.y > canvas.height - this.radius || this.y < 0) {
@@ -44,7 +44,7 @@ const ball = {
   }
 }
 
-const paddlePlayer = {
+const playerPaddle = {
   x: PADDLE_DISTANCE,
   y: canvas.height / 2 - PADDLE_HEIGHT / 2,
   speed: 10,
@@ -55,13 +55,13 @@ const paddlePlayer = {
     drawRect(this.x, this.y, this.width, this.height, this.color)
   },
   move(y) {
-    paddlePlayer.y = y - 50
-    if (paddlePlayer.y < 0) paddlePlayer.y = 0
-    if (paddlePlayer.y > canvas.height - PADDLE_HEIGHT) paddlePlayer.y = canvas.height - PADDLE_HEIGHT
+    this.y = y - 50
+    if (this.y < 0) this.y = 0
+    if (this.y > canvas.height - PADDLE_HEIGHT) this.y = canvas.height - PADDLE_HEIGHT
   }
 }
 
-window.addEventListener("mousemove", evt => paddlePlayer.move(evt.clientY))
+window.addEventListener("mousemove", evt => playerPaddle.move(evt.clientY))
 
 window.onload = () => {
   setInterval(() => {
@@ -69,6 +69,6 @@ window.onload = () => {
     ball.draw()
     ball.move()
     ball.rebound()
-    paddlePlayer.draw()
+    playerPaddle.draw()
   })
 }

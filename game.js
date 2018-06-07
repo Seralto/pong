@@ -2,6 +2,8 @@ const canvas = document.getElementById('canvas')
 const context = canvas.getContext('2d')
 
 const PADDLE_HEIGHT = 100
+const PADDLE_WIDTH = 10
+const PADDLE_DISTANCE = 5
 
 drawRect = (coordX, coordY, width, heigth, color) => {
   context.fillStyle = color
@@ -15,8 +17,8 @@ drawScreen = () => {
 const ball = {
   x: canvas.width / 2,
   y: canvas.height / 2,
-  speedX: Math.random() + 1,
-  speedY: Math.random() * Math.random() < 0.5 ? - 1 : 1,
+  speedX: Math.random() + 0.5,
+  speedY: Math.random() * Math.random() * .3 < 0.5 ? - 1 : 1,
   radius: 6,
   color: 'white',
   draw() {
@@ -30,7 +32,10 @@ const ball = {
     this.y += this.speedY
   },
   rebound() {
-    if(this.x > canvas.width - this.radius || this.x < 0) {
+    if(this.x > canvas.width - this.radius) {
+      this.speedX = -this.speedX
+    }
+    if(this.x < PADDLE_WIDTH + PADDLE_DISTANCE && this.y > paddlePlayer.y && this.y < paddlePlayer.y + PADDLE_HEIGHT ) {
       this.speedX = -this.speedX
     }
     if(this.y > canvas.height - this.radius || this.y < 0) {
@@ -40,10 +45,10 @@ const ball = {
 }
 
 const paddlePlayer = {
-  x: 10,
+  x: PADDLE_DISTANCE,
   y: canvas.height / 2 - PADDLE_HEIGHT / 2,
   speed: 10,
-  width: 10,
+  width: PADDLE_WIDTH,
   height: PADDLE_HEIGHT,
   color: 'white',
   draw() {
